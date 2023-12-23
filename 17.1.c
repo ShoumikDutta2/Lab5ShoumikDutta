@@ -19,10 +19,10 @@ int main()
 	double* lons = malloc(sizeof(float) * (*wayPoints));
 	userInputCoordinates(lats, lons, *wayPoints);
 	double distance = overallDistance(lats, lons, *wayPoints);
-	printf("%lf", distance);
-
-	//need to free memory
-
+	printf("By taking this route you will travel %.2lf km.", distance);
+	free(lats);
+	free(lons);
+	free(wayPoints);
 	return 0;
 }
 void userInputWayPoints(int* wayPoints)
