@@ -4,45 +4,51 @@
 #include<stdlib.h>
 #include <math.h>
 
+typedef struct geoCoord {
+	double lats;
+	double lons;
+};
+
 void userInputWayPoints(int*);
 void clearBuffer();
-void userInputCoordinates(double*, double*, int);
-double overallDistance(double*, double*, int);
+void userInputCoordinates(struct geoCoord* , int);
+double overallDistance(struct geoCoord*, int);
 double distanceKm(double, double, double, double);
 double radianConversion(double);
 
 int main()
 {
+	
 	int* wayPoints = malloc(sizeof(int));
 	userInputWayPoints(wayPoints);
-	double* lats = malloc(sizeof(double) * (*wayPoints));
-	double* lons = malloc(sizeof(float) * (*wayPoints));
-	userInputCoordinates(lats, lons, *wayPoints);
-	double distance = overallDistance(lats, lons, *wayPoints);
+	struct geoCoord* cordinates = malloc(sizeof(struct geoCoord) * (*wayPoints));
+	struct geoCoord *ptrCordinates = cordinates;
+	userInputCoordinates(ptrCordinates, *wayPoints);
+	double distance = overallDistance(ptrCordinates, *wayPoints);
 	printf("By taking this route you will travel %.2lf km.", distance);
-	free(lats);
-	free(lons);
+	free(cordinates);
 	free(wayPoints);
 	return 0;
 }
+
 void userInputWayPoints(int* wayPoints)
 {
 	printf("Enter Number of waypoints In Number: ");
-	if (scanf("%d", wayPoints) != 1 )
+	if (scanf("%d", wayPoints) != 1)
 	{
 		clearBuffer();
 		printf("\nInvalid Input.Try Again\n");
 		userInputWayPoints(wayPoints);
 	}
-	
-	
+
+
 }
-void userInputCoordinates(double* lats, double* lons, int arrSize)
+void userInputCoordinates(struct geoCoord* coordinates, int arrSize)
 {
 	for (int i = 0; i < arrSize; i++)
 	{
 		printf("Waypoint %d: ", i + 1);
-		if (scanf("%lf  %lf", &lats[i], &lons[i]) != 2 )
+		if (scanf("%lf  %lf", &(coordinates[i].lats), &(coordinates[i].lons)) != 2)
 		{
 			printf("Invalid Input.Try again\n");
 			clearBuffer();
@@ -51,14 +57,13 @@ void userInputCoordinates(double* lats, double* lons, int arrSize)
 	}
 
 }
-double overallDistance(double* lats, double* lons, int arrsize)
+double overallDistance(struct geoCoord* coordinates, int arrsize)
 {
 	double distance = 0.0;
 
 	for (int i = 0; i < arrsize - 1; i++)
 	{
-		distance = distance + distanceKm(lats[i], lats[i + 1], lons[i], lons[i + 1]);
-
+		distance = distance + distanceKm(coordinates[i].lats, coordinates[i+1].lats, coordinates[i].lons, coordinates[i+1].lons);
 	}
 	return distance;
 }

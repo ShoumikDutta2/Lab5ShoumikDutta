@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="17.1.c">
+    <ClCompile Include="17.2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
