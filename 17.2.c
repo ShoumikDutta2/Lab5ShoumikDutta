@@ -18,10 +18,9 @@ double radianConversion(double);
 
 int main()
 {
-	
 	int* wayPoints = malloc(sizeof(int));
 	userInputWayPoints(wayPoints);
-	struct geoCoord* cordinates = malloc(sizeof(struct geoCoord) * (*wayPoints));
+	struct geoCoord* cordinates = malloc(sizeof(struct geoCoord) * (*wayPoints)); // null pointer dereferecing issue
 	struct geoCoord *ptrCordinates = cordinates;
 	userInputCoordinates(ptrCordinates, *wayPoints);
 	double distance = overallDistance(ptrCordinates, *wayPoints);
@@ -33,22 +32,27 @@ int main()
 
 void userInputWayPoints(int* wayPoints)
 {
-	printf("Enter Number of waypoints In Number: ");
-	if (scanf("%d", wayPoints) != 1)
+	float input;
+	printf("Enter the waypoints:");
+
+	if (scanf("%f", &input) == 1 && input > 0 && (int)input == (int)ceil(input))
 	{
+		*wayPoints = (int)input;
 		clearBuffer();
-		printf("\nInvalid Input.Try Again\n");
+	}
+	else
+	{
+		printf("Invalid Input. Try again\n");
+		clearBuffer();
 		userInputWayPoints(wayPoints);
 	}
-
-
 }
 void userInputCoordinates(struct geoCoord* coordinates, int arrSize)
 {
 	for (int i = 0; i < arrSize; i++)
 	{
 		printf("Waypoint %d: ", i + 1);
-		if (scanf("%lf  %lf", &(coordinates[i].lats), &(coordinates[i].lons)) != 2)
+		if (scanf("%lf  %lf", &(coordinates[i].lats), &(coordinates[i].lons)) != 2 || coordinates[i].lats < -90 || coordinates[i].lats>90 || coordinates[i].lons < -180 || coordinates[i].lons>180)
 		{
 			printf("Invalid Input.Try again\n");
 			clearBuffer();

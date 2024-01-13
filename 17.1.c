@@ -16,7 +16,7 @@ int main()
 	int* wayPoints = malloc(sizeof(int));
 	userInputWayPoints(wayPoints);
 	double* lats = malloc(sizeof(double) * (*wayPoints));
-	double* lons = malloc(sizeof(float) * (*wayPoints));
+	double* lons = malloc(sizeof(double) * (*wayPoints));
 	userInputCoordinates(lats, lons, *wayPoints);
 	double distance = overallDistance(lats, lons, *wayPoints);
 	printf("By taking this route you will travel %.2lf km.", distance);
@@ -27,29 +27,33 @@ int main()
 }
 void userInputWayPoints(int* wayPoints)
 {
-	printf("Enter Number of waypoints In Number: ");
-	if (scanf("%d", wayPoints) != 1 )
+	float input;
+	printf("Enter the waypoints:");
+	
+	if (scanf("%f", &input)==1 && input > 0 && (int)input == (int)ceil(input))
 	{
+		*wayPoints = (int)input;
 		clearBuffer();
-		printf("\nInvalid Input.Try Again\n");
+	}
+	else
+	{
+		printf("Invalid Input. Try again\n");
+		clearBuffer();
 		userInputWayPoints(wayPoints);
 	}
-	
-	
 }
 void userInputCoordinates(double* lats, double* lons, int arrSize)
 {
 	for (int i = 0; i < arrSize; i++)
 	{
 		printf("Waypoint %d: ", i + 1);
-		if (scanf("%lf  %lf", &lats[i], &lons[i]) != 2 )
+		if (scanf("%lf  %lf", &lats[i], &lons[i]) != 2 || lats[i] < -90 || lats[i]>90 || lons[i] < -180 || lons[i]>180)
 		{
-			printf("Invalid Input.Try again\n");
+			printf("Invalid Input.Try again.\n");
 			clearBuffer();
 			i--; // index stays at same place
 		}
 	}
-
 }
 double overallDistance(double* lats, double* lons, int arrsize)
 {
